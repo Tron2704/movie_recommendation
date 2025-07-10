@@ -25,6 +25,6 @@ streamlit, pandas, scikit-learn
 bash
 Copy
 Edit
-pip install -r requirements.txt
+pip install pandas scikit-learn streamlit
 streamlit run movie_recommender.py
 Note: Ensure movie.csv is in the same directory as the script.
