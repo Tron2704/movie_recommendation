@@ -1,4 +1,3 @@
-An interactive Movie Recommender app built with Streamlit and Scikit-learn. Get movie suggestions by genre or find similar movies using TF-IDF and cosine similarity. Features a modern UI, fast performance, and genre-based filtering. Just run the app and start discovering your next favorite film!
 🎬 Movie Recommender System
 This repository contains a sleek, interactive Movie Recommendation System built using Python, Streamlit, and Scikit-learn. It recommends movies based on either:
 
