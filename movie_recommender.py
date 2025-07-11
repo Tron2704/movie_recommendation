@@ -1,9 +1,8 @@
-import streamlit as st
-import random
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
-
+import streamlit as st
+#import random
 
 # --- Load Data ---
 @st.cache_data
@@ -29,7 +28,7 @@ indices = pd.Series(df.index, index=df['title']).drop_duplicates()
 def recommend_by_genre(genre):
     genre_movies = df[df['genres'].str.contains(genre, case=False)]
     titles = genre_movies['title'].dropna().tolist()
-    random.shuffle(titles)
+    #random.shuffle(titles)
     return titles[:5]
 
 def recommend_by_movie(title):
@@ -37,8 +36,8 @@ def recommend_by_movie(title):
         return ["Movie not found!"]
     idx = indices[title]
     sim_scores = list(enumerate(cosine_sim[idx]))
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:20]  # top 20 similar
-    random.shuffle(sim_scores)
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:20] 
+    #random.shuffle(sim_scores)
     movie_indices = [i[0] for i in sim_scores[:5]]
     return df['title'].iloc[movie_indices].tolist()
 
@@ -73,19 +72,22 @@ st.markdown("""
             overflow-x: hidden;
         }
         
-        /* Remove Streamlit branding and margins */
+        /* Removed dark background */
         .stApp {
             background: transparent;
         }
         
-        /* Main container */
         .main .block-container {
-            padding: 1rem 1rem;
             max-width: 100%;
             margin: 0 auto;
+            padding: 1rem 1rem;
+        }
+
+        .stMainBlockContainer {
+            padding: 5rem 1rem 2rem;
         }
         
-        /* Animated background */
+        /* Animation fpor background */
         .stApp::before {
             content: '';
             position: fixed;
@@ -107,10 +109,9 @@ st.markdown("""
             }
         }
         
-        /* Header styles */
         h1 {
-            font-size: clamp(2.5rem, 5vw, 4rem) !important;
-            font-weight: 700 !important;
+            font-size: clamp(2.5rem, 5vw, 2rem) !important;
+            font-weight: 600 !important;
             text-align: center !important;
             color: white !important;
             margin: 0 0 1rem 0 !important;
@@ -129,7 +130,6 @@ st.markdown("""
             }
         }
         
-        /* Subtitle */
         .subtitle {
             text-align: center;
             color: rgba(255, 255, 255, 0.8);
@@ -142,6 +142,7 @@ st.markdown("""
             from { opacity: 0; }
             to { opacity: 1; }
         }
+
         
         /* Radio buttons */
         .stRadio > div {
@@ -153,17 +154,17 @@ st.markdown("""
         }
         
         .stRadio > div > label {
+            border: 2px solid rgba(255, 255, 255, 0.2) !important;
+            padding: 1rem 2rem !important;
             background: rgba(255, 255, 255, 0.1) !important;
             backdrop-filter: blur(10px) !important;
             border-radius: 15px !important;
-            padding: 1rem 2rem !important;
-            border: 2px solid rgba(255, 255, 255, 0.2) !important;
-            color: white !important;
             font-weight: 500 !important;
-            cursor: pointer !important;
-            transition: all 0.3s ease !important;
             min-width: 200px !important;
             text-align: center !important;
+            transition: all 0.3s ease !important;
+            color: white !important;
+            cursor: pointer !important;
         }
         
         .stRadio > div > label:hover {
@@ -177,27 +178,35 @@ st.markdown("""
             border-color: rgba(255, 255, 255, 0.5) !important;
         }
         
-        /* Enhanced Select boxes */
-        .stSelectbox > div > div  {
+        /* Select boxes */
+        .stSelectbox > div > div {
             background: rgba(255, 255, 255, 0.1) !important;
             border-radius: 15px !important;
             color: white !important;
             backdrop-filter: blur(10px) !important;
+            padding: 1.5rem 1rem !important; /* Increased padding */
+            font-size: 1.1rem !important; /* Optional: Increase font size */
+            text-align: center !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
         }
+
+
         
         /* Suggestions container */
         .suggestions-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            margin-top: -10px;
-            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
             max-height: 300px;
             overflow-y: auto;
             animation: slideInDown 0.3s ease-out;
             position: relative;
             z-index: 10;
+            margin-top: -10px;
+            margin-bottom: 1rem;
         }
         
         .suggestion-item {
@@ -245,7 +254,7 @@ st.markdown("""
             border-radius: 50px !important;
             padding: 1rem 3rem !important;
             font-size: 1.1rem !important;
-            font-weight: 600 !important;
+            font-weight: 500 !important;
             cursor: pointer !important;
             transition: background 0.3s ease, color 0.3s ease !important;
             box-shadow: 0 8px 32px rgba(255, 107, 107, 0.3) !important;
@@ -312,13 +321,14 @@ st.markdown("""
             transition: all 0.3s ease;
             animation: slideInUp 0.6s ease-out;
             animation-fill-mode: both;
-            min-height: 120px; /* Ensures cards don’t look too small */
-            height: auto;       /* Allows dynamic height based on content */
+            min-height: 120px; 
+            height: auto;       
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
+        
         .movie-card:hover {
             background: rgba(255, 255, 255, 0.15);
             transform: translateY(-5px);
@@ -332,7 +342,6 @@ st.markdown("""
             font-weight: 600;
         }
         
-        /* Input container for better spacing */
         .input-container {
             margin-bottom: 2rem;
         }
@@ -360,14 +369,13 @@ st.markdown("""
         }
 
         
-        /* Animation delays for staggered effect */
+        /* Animation delays */
         .movie-card:nth-child(1) { animation-delay: 0.1s; }
         .movie-card:nth-child(2) { animation-delay: 0.2s; }
         .movie-card:nth-child(3) { animation-delay: 0.3s; }
         .movie-card:nth-child(4) { animation-delay: 0.4s; }
         .movie-card:nth-child(5) { animation-delay: 0.5s; }
         
-        /* Hide Streamlit elements */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
@@ -397,14 +405,14 @@ st.markdown("""
 st.markdown("<h1>🎬 Movie Recommender</h1>", unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Discover your next favorite movie with AI-powered recommendations</div>', unsafe_allow_html=True)
 
-# RECOMMENDATION MODE
+# MODE
 mode = st.radio("Select Mode", ["🎭 Recommend by Genre", "🎞️ Recommend by Movie"], horizontal=True)
 
-# ===== GENRE-BASED RECOMMENDATION =====
+# ===== GENRE =====
 if mode == "🎭 Recommend by Genre":
     st.markdown('<div class="input-container">', unsafe_allow_html=True)
 
-    # Only keep clean, title-cased genres
+    # cleaned titlws and sorting
     genres = sorted(set(g.title() for genres in df['genres_list'] for g in genres if g.isalpha()))
     selected_genre = st.selectbox("🎭 Choose a genre:", ["Please select a genre"] + genres)
 
@@ -415,7 +423,7 @@ if mode == "🎭 Recommend by Genre":
             recommendations = recommend_by_genre(selected_genre)
             st.success(f"✨ Top movies in {selected_genre}")
 
-            # Display movies in a responsive grid
+            # Displaying movies in grid
             cols = st.columns([1, 1, 1, 1, 1])
             for i, movie in enumerate(recommendations):
                 with cols[i]:
@@ -426,15 +434,14 @@ if mode == "🎭 Recommend by Genre":
                     ''', unsafe_allow_html=True)
 
 
-# ===== MOVIE-BASED RECOMMENDATION =====
-
+# ===== MOVIE =====
 elif mode == "🎞️ Recommend by Movie":
     st.markdown('<div class="input-container">', unsafe_allow_html=True)
 
-    # Get all movie titles
+    # Fetcing titles
     movie_titles = df['title'].dropna().unique().tolist()
 
-    # Autocomplete input in the same field
+    # Autocomplete input field
     movie_input = st.selectbox(
         "🎞️ Type or select a movie:",
         options=[""] + movie_titles,
@@ -444,7 +451,6 @@ elif mode == "🎞️ Recommend by Movie":
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Use the movie input for recommendations
     if movie_input and movie_input != "" and st.button("🎯 Find Similar Movies"):
         with st.spinner("Analyzing movie DNA..."):
             recommendations = recommend_by_movie(movie_input)
@@ -452,7 +458,7 @@ elif mode == "🎞️ Recommend by Movie":
             if recommendations[0] != "Movie not found!":
                 st.success(f"✨ Movies similar to {movie_input}")
 
-                # Display movies in a responsive grid
+                # Displaying movies in grid
                 cols = st.columns([1, 1, 1, 1, 1])
                 for i, movie in enumerate(recommendations):
                     with cols[i]:
